@@ -1,0 +1,25 @@
+# Fecha-I: Scheduled date and time of the flight.
+# Vlo-I : Scheduled flight number.
+# Ori-I : Programmed origin city code.
+# Des-I : Programmed destination city code.
+# Emp-I : Scheduled flight airline code.
+# Fecha-O : Date and time of flight operation.
+# Vlo-O : Flight operation number of the flight.
+# Ori-O : Operation origin city code
+# Des-O : Operation destination city code.
+# Emp-O : Airline code of the operated flight.
+# DIA: Day of the month of flight operation.
+# MES : Number of the month of operation of the flight.
+# AÑO : Year of flight operation.
+# DIANOM : Day of the week of flight operation.
+# TIPOVUELO : Type of flight, I =International, N =National.
+# OPERA : Name of the airline that operates.
+# SIGLAORI: Name city of origin.
+# SIGLADES: Destination city name.
+
+#2. Generate the following additional columns. Please export them to a CSV file named synthetic_features.csv:
+#f Date-I is between Dec-15 and Mar-3
+#high_season : 1 if Date-I is between Dec-15 and Mar-3, or Jul-15 and Jul-31, or Sep-11 and Sep-30, 0 otherwise.
+#min_diff : difference in minutes between Date-O and Date-I.
+#delay_15 : 1 if min_diff > 15, 0 if not.
+# period_day : morning (between 5:00 and 11:59), afternoon (between 12:00 and 18:59) and night (between 19:00 and 4:59), based onDate-I .

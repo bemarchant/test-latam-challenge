@@ -17,9 +17,19 @@
 # SIGLAORI: Name city of origin.
 # SIGLADES: Destination city name.
 
-#2. Generate the following additional columns. Please export them to a CSV file named synthetic_features.csv:
-#f Date-I is between Dec-15 and Mar-3
-#high_season : 1 if Date-I is between Dec-15 and Mar-3, or Jul-15 and Jul-31, or Sep-11 and Sep-30, 0 otherwise.
-#min_diff : difference in minutes between Date-O and Date-I.
-#delay_15 : 1 if min_diff > 15, 0 if not.
-# period_day : morning (between 5:00 and 11:59), afternoon (between 12:00 and 18:59) and night (between 19:00 and 4:59), based onDate-I .
+2. Generate the following additional columns. Please export them to a CSV file named synthetic_features.csv:
+- high_season : 1 if Date-I is between Dec-15 and Mar-3, or Jul-15 and Jul-31, or Sep-11 and Sep-30, 0 otherwise.
+- min_diff : difference in minutes between Date-O and Date-I.
+- delay_15 : 1 if min_diff > 15, 0 if not.
+- period_day : morning (between 5:00 and 11:59), afternoon (between 12:00 and 18:59) and night (between 19:00 and 4:59), based onDate-I .
+
+3. 
+What is the behavior of the delay rate across 
+- destination       ['Des-I']
+- airline           ['Emp-I']
+- month of the year ['MES']
+- day of the week   ['DIANOM']
+- season            ['high_season']
+- type of flight    ['TIPOVUELO']
+
+What variables would you expect to have the most influence in predicting delays?

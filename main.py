@@ -6,30 +6,21 @@ import sklearn as sk
 
 df = pd.read_csv('dataset_SCL.csv')
 
-#Data 
+#1. Exploring Data 
 print(df.head(5))
 print(df.info())
+print(df['DIANOM'].describe())
 
-#check for missing values
+#Check for missing values
 print(df.isna().sum())
 
-sns.countplot(x=df["OPERA"])
-plt.show()
+#codes = used_cars['manufacturer_name'].cat.codes
+#categories = used_cars['manufacturer_name']
+#name_map = dict(zip(codes, categories))
+#used_cars['manufaturer_code'].map(name_map)
 
-# Fecha-I: Scheduled date and time of the flight.
-# Vlo-I : Scheduled flight number.
-# Ori-I : Programmed origin city code.
-# Des-I : Programmed destination city code.
-# Emp-I : Scheduled flight airline code.
-# Fecha-O : Date and time of flight operation.
-# Vlo-O : Flight operation number of the flight.Ori-O : Operation origin city code
-# Des-O : Operation destination city code.
-# Emp-O : Airline code of the operated flight.
-# DIA: Day of the month of flight operation.
-# MES : Number of the month of operation of the flight.
-# AÑO : Year of flight operation.
-# DIANOM : Day of the week of flight operation.
-# TIPOVUELO : Type of flight, I =International, N =National.
-# OPERA : Name of the airline that operates.
-# SIGLAORI: Name city of origin.
-# SIGLADES: Destination city name.
+#boolean coding
+#Find all body_type that contains "van"
+#used_cars['body_type'].str.contains("van", regex=False)
+#used_cars["van_code"] = np.where(used_cars["body_type"].str.contains("van", regex=False), 1, 0)
+

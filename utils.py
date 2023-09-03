@@ -25,11 +25,13 @@ def plot_rate_delay(df, feature):
     delay_counts = df[df['delay_15'] == 1].groupby(feature)['delay_15'].count()
     on_time_counts = df[df['delay_15'] == 0].groupby(feature)['delay_15'].count()
     df_counts = pd.DataFrame({'delay': delay_counts, 'on_time': on_time_counts})
-
-    plt.figure(figsize=(12, 6))
-    sns.barplot(x=delay_counts.index, y=df_counts['delay'], color='red', label='Delayed Flights')
-    sns.barplot(x=df_counts.index, y=df_counts['on_time'], color='black', bottom=df_counts['delay'])
-
-    plt.ylabel('Count of Flights')
-    plt.legend()
+    df_counts['delay_ratio'] = df_counts['delay'] / (df_counts['delay'] + df_counts['on_time'])
+    
+    sns.pointplot(x = delay_counts.index, y = df_counts['delay_ratio'], color='black')
+    plt.xticks(rotation=90)
+    plt.ylabel('Delay Ratio')
+    plt.grid('on')
+    plt.legend(loc='best')
+    plt.show()
+    
     return

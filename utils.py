@@ -22,12 +22,16 @@ def which_period_day(date):
     return 'night'
 
 def plot_rate_delay(df, feature):
+    
+    df = df.dropna(subset=[feature])
     delay_counts = df[df['delay_15'] == 1].groupby(feature)['delay_15'].count()
     on_time_counts = df[df['delay_15'] == 0].groupby(feature)['delay_15'].count()
     df_counts = pd.DataFrame({'delay': delay_counts, 'on_time': on_time_counts})
+    df_counts['delay'] = df_counts['delay'].fillna(0)
+    df_counts['on_time'] = df_counts['on_time'].fillna(0)
     df_counts['delay_ratio'] = df_counts['delay'] / (df_counts['delay'] + df_counts['on_time'])
-    
-    sns.pointplot(x = delay_counts.index, y = df_counts['delay_ratio'], color='black')
+
+    sns.pointplot(x = df_counts.index, y = df_counts['delay_ratio'], color='black')
     plt.xticks(rotation=90)
     plt.ylabel('Delay Ratio')
     plt.grid('on')

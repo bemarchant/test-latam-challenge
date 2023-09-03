@@ -69,28 +69,34 @@ df = pd.concat([df, df_synth], axis=1)
 # plt.ylabel('Delay in Minutes (Fecha-I - Fecha-O)')
 # plt.show()
 
-def plot_rate_delay(df, feature):
-    delay_counts = df[df['delay_15'] == 1].groupby(feature)['delay_15'].count()
-    on_time_counts = df[df['delay_15'] == 0].groupby(feature)['delay_15'].count()
-    df_counts = pd.DataFrame({'delay': delay_counts, 'on_time': on_time_counts})
-    df_counts['delay_ratio'] = df_counts['delay'] / (df_counts['delay'] + df_counts['on_time'])
-    sns.pointplot(x = delay_counts.index, y = df_counts['delay_ratio'], color='black')
+def plot_rate_delay(df, features):
+    
+    n_features = len(features)
+    fig, axes = plt.subplots(n_features, 1, figsize=(10 * n_features, 5))
+    
+    if n_features == 1:
+        axes = [axes]  # Convert to a list if there's only one feature
+    for i, feature in enumerate(features):
+        delay_counts = df[df['delay_15'] == 1].groupby(feature)['delay_15'].count()
+        on_time_counts = df[df['delay_15'] == 0].groupby(feature)['delay_15'].count()
+        df_counts = pd.DataFrame({'delay': delay_counts, 'on_time': on_time_counts})
+        df_counts['delay'] = df_counts['delay'].fillna(0)
+        df_counts['on_time'] = df_counts['on_time'].fillna(0)
+        df_counts['delay_ratio'] = df_counts['delay'] / (df_counts['delay'] + df_counts['on_time'])
 
-    # sns.barplot(x=delay_counts.index, y=df_counts['delay'], color='gray', label='Delayed Flights')
-    # sns.barplot(x=df_counts.index, y=df_counts['on_time'], color='black', label='On-time Flights', bottom=df_counts['delay'])
+        sns.pointplot(x = df_counts.index, y = df_counts['delay_ratio'], color='black', ax=axes[i])
+        axes[i].set_xticklabels(axes[i].get_xticklabels(), rotation=90)
+        axes[i].set_ylabel('Delay Ratio')
+        axes[i].set_title(f'Feature: {feature}')
+        axes[i].grid(True)
     
-    plt.xticks(rotation=90)
-    plt.ylabel('Delay Ratio')
-    plt.grid('on')
-    plt.legend(loc='best')
+    plt.tight_layout()
     plt.show()
-    
+
     return
 
-# plot_rate_delay(df, 'Des-I')
-plot_rate_delay(df, 'Emp-I')
-plot_rate_delay(df, 'MES')
-plot_rate_delay(df, 'DIANOM')
+# plot_rate_delay(df, ['Des-I','DIANOM','MES','Emp-I'])
+plot_rate_delay(df, ['Des-I'])
 plot_rate_delay(df, 'high_season')
 plot_rate_delay(df, 'TIPOVUELO')
 

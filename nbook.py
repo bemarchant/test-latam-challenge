@@ -102,8 +102,9 @@ def plot_rate_delay(df, features):
 # plot_rate_delay(df, 'TIPOVUELO')
 
 # machine learning 1
-from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 predictors = ['Des-I','Emp-I','DIANOM','TIPOVUELO','high_season','period_day']
 target = ['delay_15']
@@ -113,29 +114,42 @@ y = df[target]
 X_encoded = pd.get_dummies(X, columns=['Des-I', 'Emp-I', 'DIANOM', 'TIPOVUELO', 'period_day'])
 features_encoded = X_encoded.columns
 
-X_train = X_encoded.iloc[:-15000]
-y_train = y.iloc[:-15000]
-X_test = X_encoded.iloc[-15000:]
-y_test = y.iloc[-15000:]
+X_train, X_test, y_train, y_test = train_test_split(X_encoded, y, test_size=0.2, random_state=42)
 
-# logistic_model = LogisticRegression(random_state=42)
-# logistic_model.fit(X_train, y_train)
-# y_pred = logistic_model.predict(X_test)
+# X_train = X_encoded.iloc[:-15000]
+# y_train = y.iloc[:-15000]
+# X_test = X_encoded.iloc[-15000:]
+# y_test = y.iloc[-15000:]
 
-# accuracy = accuracy_score(y_test, y_pred)
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.fit_transform(X_test)
+
+#LogisticRegression
+# from sklearn.linear_model import LogisticRegression
+# log_reg = LogisticRegression(random_state=42)
+# log_reg.fit(X_train, y_train)
+
+# threshold = 0.5
+
+# y_pred_prob = log_reg.predict_proba(X_train)
+# # y_pred = (y_pred_prob[:, 1] >= threshold).astype(int)
+# y_pred = log_reg.predict(X_train)
+# accuracy = accuracy_score(y_train, y_pred)
 # print(f"Accuracy: {accuracy}")
 # print("\nClassification Report:")
-# print(classification_report(y_test, y_pred))
+# print(classification_report(y_train, y_pred))
 # print("\nConfusion Matrix:")
-# print(confusion_matrix(y_test, y_pred))
+# print(confusion_matrix(y_train, y_pred))
 
+# plot_roc_curve(y_pred_prob[:,1], y_train)
+
+#RandomForestClassifier
 # from sklearn.ensemble import RandomForestClassifier
-
 # rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
 # rf_model.fit(X_train, y_train)
 # y_pred = rf_model.predict(X_train)
 # accuracy = accuracy_score(y_train, y_pred)
-
 # print(f"Accuracy: {accuracy}")
 # print("\nClassification Report:")
 # print(classification_report(y_train, y_pred))
@@ -143,27 +157,34 @@ y_test = y.iloc[-15000:]
 # print(confusion_matrix(y_train, y_pred))
 
 
-# y_pred = rf_model.predict(X_test)
-# accuracy = accuracy_score(y_test, y_pred)
-
-# y_probs = rf_model.predict_proba(X_test)[:, 1]
-# plot_roc_curve(y_probs, y_test)
-
-# print(f"Accuracy: {accuracy}")
-# print("\nClassification Report:")
-# print(classification_report(y_test, y_pred))
-# print("\nConfusion Matrix:")
-# print(confusion_matrix(y_test, y_pred))
-
+## DecisionTreeClassifier
 from sklearn.tree import DecisionTreeClassifier
 dt_clf = DecisionTreeClassifier(random_state=42)
 dt_clf.fit(X_train, y_train)
-y_pred = dt_clf.predict(X_test)
-accuracy = accuracy_score(y_test, y_pred)
+y_pred = dt_clf.predict(X_train)
+y_pred_prob = dt_clf.predict_proba(X_train)
+
+accuracy = accuracy_score(y_train, y_pred)
 print(f"Accuracy: {accuracy}")
 print("\nClassification Report:")
-print(classification_report(y_test, y_pred))
+print(classification_report(y_train, y_pred))
 print("\nConfusion Matrix:")
-print(confusion_matrix(y_test, y_pred))
+print(confusion_matrix(y_train, y_pred))
+# plot_feature_importances_top10(dt_clf, features_encoded)
 
-plot_feature_importances_top10(dt_clf, features_encoded)
+y_prob_train = dt_clf.predict_proba(X_train)
+y_prob_test = dt_clf.predict_proba(X_test)
+plot_roc_curve(y_prob_train[:,1], y_prob_test[:,1], y_test, y_train)
+
+#GradientBoostingClassifier
+# from sklearn.ensemble import GradientBoostingClassifier
+# gb_clf = GradientBoostingClassifier(random_state=42)
+# gb_clf.fit(X_train, y_train)
+# y_pred = gb_clf.predict(X_train)
+# accuracy = accuracy_score(y_train, y_pred)
+# print(f"Accuracy: {accuracy}")
+# print("\nClassification Report:")
+# print(classification_report(y_train, y_pred))
+# print("\nConfusion Matrix:")
+# print(confusion_matrix(y_train, y_pred))
+

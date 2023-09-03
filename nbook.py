@@ -6,6 +6,7 @@ import sklearn as sk
 
 from utils import *
 df = pd.read_csv('dataset_SCL.csv')
+# print(sorted(df['OPERA'].unique()))
 
 #1. Exploring Data 
 # print(df.head(5))
@@ -96,8 +97,73 @@ def plot_rate_delay(df, features):
     return
 
 # plot_rate_delay(df, ['Des-I','DIANOM','MES','Emp-I'])
-plot_rate_delay(df, ['Des-I'])
-plot_rate_delay(df, 'high_season')
-plot_rate_delay(df, 'TIPOVUELO')
+# plot_rate_delay(df, ['Des-I'])
+# plot_rate_delay(df, 'high_season')
+# plot_rate_delay(df, 'TIPOVUELO')
 
-# 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
+# machine learning 1
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+predictors = ['Des-I','Emp-I','DIANOM','TIPOVUELO','high_season','period_day']
+target = ['delay_15']
+
+X = df[predictors]
+y = df[target]
+X_encoded = pd.get_dummies(X, columns=['Des-I', 'Emp-I', 'DIANOM', 'TIPOVUELO', 'period_day'])
+features_encoded = X_encoded.columns
+
+X_train = X_encoded.iloc[:-15000]
+y_train = y.iloc[:-15000]
+X_test = X_encoded.iloc[-15000:]
+y_test = y.iloc[-15000:]
+
+# logistic_model = LogisticRegression(random_state=42)
+# logistic_model.fit(X_train, y_train)
+# y_pred = logistic_model.predict(X_test)
+
+# accuracy = accuracy_score(y_test, y_pred)
+# print(f"Accuracy: {accuracy}")
+# print("\nClassification Report:")
+# print(classification_report(y_test, y_pred))
+# print("\nConfusion Matrix:")
+# print(confusion_matrix(y_test, y_pred))
+
+# from sklearn.ensemble import RandomForestClassifier
+
+# rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
+# rf_model.fit(X_train, y_train)
+# y_pred = rf_model.predict(X_train)
+# accuracy = accuracy_score(y_train, y_pred)
+
+# print(f"Accuracy: {accuracy}")
+# print("\nClassification Report:")
+# print(classification_report(y_train, y_pred))
+# print("\nConfusion Matrix:")
+# print(confusion_matrix(y_train, y_pred))
+
+
+# y_pred = rf_model.predict(X_test)
+# accuracy = accuracy_score(y_test, y_pred)
+
+# y_probs = rf_model.predict_proba(X_test)[:, 1]
+# plot_roc_curve(y_probs, y_test)
+
+# print(f"Accuracy: {accuracy}")
+# print("\nClassification Report:")
+# print(classification_report(y_test, y_pred))
+# print("\nConfusion Matrix:")
+# print(confusion_matrix(y_test, y_pred))
+
+from sklearn.tree import DecisionTreeClassifier
+dt_clf = DecisionTreeClassifier(random_state=42)
+dt_clf.fit(X_train, y_train)
+y_pred = dt_clf.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy}")
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+print("\nConfusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+plot_feature_importances_top10(dt_clf, features_encoded)

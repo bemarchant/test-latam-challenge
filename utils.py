@@ -55,8 +55,8 @@ def plot_roc_curve(y_probs_test, y_probs_train, y_test, y_train):
     roc_auc_train = auc(fpr_train, tpr_train)
 
     plt.figure(figsize=(15, 5))
-    plt.plot(fpr_train, tpr_train, color='black', lw=2, label=f'Train ROC curve (AUC = {roc_auc_train:.2f})')
-    plt.plot(fpr_test, tpr_test, color='gray', lw=2, label=f'Test ROC curve (AUC = {roc_auc_test:.2f})')
+    plt.plot(fpr_train, tpr_train, color='gray', lw=2, label=f'Train ROC curve (AUC = {roc_auc_train:.2f})')
+    plt.plot(fpr_test, tpr_test, color='black', lw=2, label=f'Test ROC curve (AUC = {roc_auc_test:.2f})')
     plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])

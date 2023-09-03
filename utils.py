@@ -24,7 +24,7 @@ def which_period_day(date):
 def plot_rate_delay(df, features):
     
     n_features = len(features)
-    fig, axes = plt.subplots(n_features, 1, figsize=(10 * n_features, 5))
+    fig, axes = plt.subplots(n_features, 1, figsize=(15 * n_features, 5))
     
     if n_features == 1:
         axes = [axes]  # Convert to a list if there's only one feature

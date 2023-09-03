@@ -6,6 +6,7 @@ import sklearn as sk
 
 from utils import *
 df = pd.read_csv('dataset_SCL.csv')
+# print(sorted(df['OPERA'].unique()))
 
 #1. Exploring Data 
 # print(df.head(5))
@@ -96,8 +97,27 @@ def plot_rate_delay(df, features):
     return
 
 # plot_rate_delay(df, ['Des-I','DIANOM','MES','Emp-I'])
-plot_rate_delay(df, ['Des-I'])
-plot_rate_delay(df, 'high_season')
-plot_rate_delay(df, 'TIPOVUELO')
+# plot_rate_delay(df, ['Des-I'])
+# plot_rate_delay(df, 'high_season')
+# plot_rate_delay(df, 'TIPOVUELO')
 
-# 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
+# machine learning
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+predictors = ['Des-I','Emp-I','DIANOM','TIPOVUELO','high_season','period_day']
+print(df[predictors].head())
+target = ['delay_15']
+
+# X = df[predictors]
+# y = df[target]
+
+# X_train = X[predictors].iloc[:-100]
+# y_train = y[target].iloc[:-100]
+# X_test = X[predictors].iloc[-100:]
+# y_test = y[target].iloc[-100:]
+
+# d_tree = DecisionTreeClassifier(random_state=42)
+# d_tree.fit(X_train, y_train)
+# y_pred = d_tree.predict(X_test)
+
+# accuracy = accuracy_score(y_test, y_pred)

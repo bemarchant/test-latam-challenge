@@ -48,12 +48,15 @@ def plot_rate_delay(df, features):
 
     return
 
-def plot_roc_curve(y_probs, y_test):
-    fpr, tpr, thresholds = roc_curve(y_test, y_probs)
-    roc_auc = auc(fpr, tpr)
+def plot_roc_curve(y_probs_test, y_probs_train, y_test, y_train):
+    fpr_test, tpr_test, thresholds = roc_curve(y_test, y_probs_test)
+    fpr_train, tpr_train, thresholds = roc_curve(y_train, y_probs_train)
+    roc_auc_test = auc(fpr_test, tpr_test)
+    roc_auc_train = auc(fpr_train, tpr_train)
 
-    plt.figure(figsize=(15, 6))
-    plt.plot(fpr, tpr, color='b', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
+    plt.figure(figsize=(15, 5))
+    plt.plot(fpr_train, tpr_train, color='black', lw=2, label=f'Train ROC curve (AUC = {roc_auc_train:.2f})')
+    plt.plot(fpr_test, tpr_test, color='gray', lw=2, label=f'Test ROC curve (AUC = {roc_auc_test:.2f})')
     plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])

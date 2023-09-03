@@ -65,3 +65,13 @@ def plot_roc_curve(y_probs, y_test):
     plt.show()
     
     return
+
+def plot_feature_importances(clf, feature_names):
+    
+    c_features = len(feature_names)
+    plt.barh(range(c_features), clf.feature_importances_)
+    plt.xlabel("Feature importance")
+    plt.ylabel("Feature name")
+    plt.yticks(np.arange(c_features), feature_names)
+    
+    return

@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pylab as plt
 import seaborn as sns
+from sklearn.metrics import roc_curve, roc_auc_score, auc
 
 def is_high_season(date):
     month = date.month
@@ -45,4 +46,22 @@ def plot_rate_delay(df, features):
     plt.tight_layout()
     plt.show()
 
+    return
+
+def plot_roc_curve(y_probs, y_test):
+    fpr, tpr, thresholds = roc_curve(y_test, y_probs)
+    roc_auc = auc(fpr, tpr)
+
+    plt.figure(figsize=(8, 6))
+    plt.plot(fpr, tpr, color='b', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
+    plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate (FPR)')
+    plt.ylabel('True Positive Rate (TPR)')
+    plt.title('Receiver Operating Characteristic (ROC) Curve')
+    plt.legend(loc='lower right')
+    plt.grid(True)
+    plt.show()
+    
     return

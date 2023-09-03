@@ -25,7 +25,7 @@ def which_period_day(date):
 def plot_rate_delay(df, features):
     
     n_features = len(features)
-    fig, axes = plt.subplots(n_features, 1, figsize=(15 * n_features, 5))
+    fig, axes = plt.subplots(n_features, 1, figsize=(15, 5))
     
     if n_features == 1:
         axes = [axes]  # Convert to a list if there's only one feature
@@ -52,7 +52,7 @@ def plot_roc_curve(y_probs, y_test):
     fpr, tpr, thresholds = roc_curve(y_test, y_probs)
     roc_auc = auc(fpr, tpr)
 
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(15, 6))
     plt.plot(fpr, tpr, color='b', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
     plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
     plt.xlim([0.0, 1.0])
@@ -66,12 +66,22 @@ def plot_roc_curve(y_probs, y_test):
     
     return
 
-def plot_feature_importances(clf, feature_names):
-    
-    c_features = len(feature_names)
-    plt.barh(range(c_features), clf.feature_importances_)
+def plot_feature_importances_top10(clf, feature_names):  
+    plt.figure(figsize=(15, 5))  
+    top=10
+    feature_importances_dict = {}
+    for i, name in enumerate(clf.feature_importances_):
+        feature_importances_dict[i] = name
+
+    sorted_feature_indices = sorted(feature_importances_dict,key=lambda k: feature_importances_dict[k], reverse=True)
+    top_feature_indices = sorted_feature_indices[:top]
+    top_feature_importances = [feature_importances_dict[i] for i in top_feature_indices]
+    top_feature_names = [feature_names[i] for i in top_feature_indices]
+
+    plt.barh(range(top), top_feature_importances, color='black')
     plt.xlabel("Feature importance")
     plt.ylabel("Feature name")
-    plt.yticks(np.arange(c_features), feature_names)
+    plt.yticks(np.arange(top), top_feature_names)
+    plt.show()
     
     return

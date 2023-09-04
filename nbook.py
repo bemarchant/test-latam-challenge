@@ -101,6 +101,13 @@ def plot_rate_delay(df, features):
 # plot_rate_delay(df, 'high_season')
 # plot_rate_delay(df, 'TIPOVUELO')
 
+delay_counts = df[df['delay_15'] == 1].groupby('high_season')['delay_15'].count()
+on_time_counts = df[df['delay_15'] == 0].groupby('high_season')['delay_15'].count()
+df_counts = pd.DataFrame({'delay': delay_counts, 'on_time': on_time_counts})
+df_counts['delay'] = df_counts['delay'].fillna(0)
+df_counts['on_time'] = df_counts['on_time'].fillna(0)
+df_counts['delay_ratio'] = df_counts['delay'] / (df_counts['delay'] + df_counts['on_time'])
+
 # machine learning 1
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split
@@ -158,23 +165,23 @@ X_test_scaled = scaler.fit_transform(X_test)
 
 
 ## DecisionTreeClassifier
-from sklearn.tree import DecisionTreeClassifier
-dt_clf = DecisionTreeClassifier(random_state=42)
-dt_clf.fit(X_train, y_train)
-y_pred = dt_clf.predict(X_train)
-y_pred_prob = dt_clf.predict_proba(X_train)
+# from sklearn.tree import DecisionTreeClassifier
+# dt_clf = DecisionTreeClassifier(random_state=42)
+# dt_clf.fit(X_train, y_train)
+# y_pred = dt_clf.predict(X_train)
+# y_pred_prob = dt_clf.predict_proba(X_train)
 
-accuracy = accuracy_score(y_train, y_pred)
-print(f"Accuracy: {accuracy}")
-print("\nClassification Report:")
-print(classification_report(y_train, y_pred))
-print("\nConfusion Matrix:")
-print(confusion_matrix(y_train, y_pred))
+# accuracy = accuracy_score(y_train, y_pred)
+# print(f"Accuracy: {accuracy}")
+# print("\nClassification Report:")
+# print(classification_report(y_train, y_pred))
+# print("\nConfusion Matrix:")
+# print(confusion_matrix(y_train, y_pred))
 # plot_feature_importances_top10(dt_clf, features_encoded)
 
-y_prob_train = dt_clf.predict_proba(X_train)
-y_prob_test = dt_clf.predict_proba(X_test)
-plot_roc_curve(y_prob_train[:,1], y_prob_test[:,1], y_test, y_train)
+# y_prob_train = dt_clf.predict_proba(X_train)
+# y_prob_test = dt_clf.predict_proba(X_test)
+# plot_roc_curve(y_prob_test[:,1], y_prob_train[:,1], y_test, y_train)
 
 #GradientBoostingClassifier
 # from sklearn.ensemble import GradientBoostingClassifier
@@ -188,3 +195,35 @@ plot_roc_curve(y_prob_train[:,1], y_prob_test[:,1], y_test, y_train)
 # print("\nConfusion Matrix:")
 # print(confusion_matrix(y_train, y_pred))
 
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
+
+param_grid = {
+    'n_estimators': [20],
+    'max_depth': [1],
+    'min_samples_split': [2],
+    'min_samples_leaf': [2],
+    'class_weight': ['balanced'],
+}
+
+rf_clf = RandomForestClassifier(random_state=42)
+grid_search = GridSearchCV(estimator=rf_clf, param_grid=param_grid, scoring='f1', cv=5)
+grid_search.fit(X_train, y_train.values.ravel())
+
+best_params = grid_search.best_params_
+best_model = grid_search.best_estimator_
+y_prob = best_model.predict_proba(X_test)
+y_pred = (y_prob[:,1] >= 0.50).astype(int)
+print(y_pred)
+accuracy = accuracy_score(y_test, y_pred)
+
+print(f"Accuracy: {accuracy}")
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+print("\nConfusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+
+y_prob_train = best_model.predict_proba(X_train)
+y_prob_test = best_model.predict_proba(X_test)
+plot_roc_curve(y_prob_test[:,1], y_prob_train[:,1], y_test, y_train)

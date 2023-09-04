@@ -1,0 +1,35 @@
+# Fecha-I: Scheduled date and time of the flight.               O 68206
+# Vlo-I : Scheduled flight number.                              X 750
+# Ori-I : Programmed origin city code.                          X 1
+# Des-I : Programmed destination city code.                     O 64          ['CYYZ', 'EGLL', 'EGYP', 'KATL', 'KDFW', 'KIAH', 'KJFK', 'KLAX', 'KMCO', 'KMIA', 'LEMD', 'LFPG', 'LIRF', 'MDPC', 'MMMX', 'MMUN', 'MPTO', 'NZAA', 'SAAR', 'SABE', 'SACO', 'SAEZ', 'SAME', 'SANT', 'SANU', 'SARI', 'SAWH', 'SAZN', 'SAZS', 'SBCT', 'SBFI', 'SBFL', 'SBGL', 'SBGR', 'SCAR', 'SCAT', 'SCBA', 'SCCF', 'SCCI', 'SCDA', 'SCFA', 'SCIE', 'SCIP', 'SCJO', 'SCNT', 'SCPQ', 'SCQP', 'SCSE', 'SCTE', 'SCVD', 'SEGU', 'SEQM', 'SEQU', 'SGAS', 'SKBO', 'SLCB', 'SLLP', 'SLVR', 'SPJC', 'SPSO', 'SULS', 'SUMU', 'YMML', 'YSSY']
+# Emp-I : Scheduled flight airline code.                        O 30          ['AAL', 'ACA', 'AFR', 'AMX', 'ARG', 'AUT', 'AVA', 'AZA', 'BAW', 'CMP', 'DAL', 'DSM', 'GLO', 'IBE', 'JAT', 'JMR', 'KLM', 'LAN', 'LAP', 'LAW', 'LNE', 'LPE', 'LRC', 'LXP', 'ONE', 'PUE', 'QFU', 'SKU', 'TAM', 'UAL']     
+# Fecha-O : Date and time of flight operation.                  O 68206
+# Vlo-O : Flight operation number of the flight.                X 867
+# Ori-O : Operation origin city code                            X 1
+# Des-O : Operation destination city code.                      X 63          ['CYYZ', 'EGLL', 'EGYP', 'KATL', 'KDFW', 'KIAD', 'KIAH', 'KJFK', 'KLAX', 'KMCO', 'KMIA', 'LEMD', 'LFPG', 'LIRF', 'MDPC', 'MMMX', 'MMUN', 'MPTO', 'NZAA', 'SAAR', 'SABE', 'SACO', 'SAEZ', 'SAME', 'SANT', 'SANU', 'SAWH', 'SAZN', 'SAZS', 'SBCT', 'SBFI', 'SBFL', 'SBGL', 'SBGR', 'SCAR', 'SCAT', 'SCBA', 'SCCF', 'SCCI', 'SCDA', 'SCFA', 'SCIE', 'SCIP', 'SCJO', 'SCNT', 'SCPQ', 'SCQP', 'SCSE', 'SCTE', 'SCVD', 'SEGU', 'SEQM', 'SGAS', 'SKBO', 'SLCB', 'SLLP', 'SLVR', 'SPJC', 'SPSO', 'SULS', 'SUMU', 'YMML', 'YSSY']
+# Emp-O : Airline code of the operated flight.                  X 32          ['48O', '56R', 'AAL', 'ACA', 'AFR', 'AMX', 'ARG', 'AUT', 'AVA', 'AZA', 'BAW', 'CMP', 'DAL', 'DSM', 'GLO', 'IBE', 'JAT', 'JMR', 'KLM', 'LAN', 'LAP', 'LNE', 'LPE', 'LRC', 'LXP', 'ONE', 'PUE', 'QFA', 'SKU', 'TAM', 'TPU', 'UAL']     
+# DIA: Day of the month of flight operation.                    O 31          
+# MES : Number of the month of operation of the flight.         O 12
+# AÑO : Year of flight operation.                               O 2
+# DIANOM : Day of the week of flight operation.                 O 7           ['Domingo', 'Jueves', 'Lunes', 'Martes', 'Miercoles', 'Sabado', 'Viernes']
+# TIPOVUELO : Type of flight, I =International, N =National.    O 2           ['I', 'N']
+# OPERA : Name of the airline that operates.                    X 23          ['Aerolineas Argentinas', 'Aeromexico', 'Air Canada', 'Air France', 'Alitalia', 'American Airlines', 'Austral', 'Avianca', 'British Airways', 'Copa Air', 'Delta Air', 'Gol Trans', 'Grupo LATAM', 'Iberia', 'JetSmart SPA', 'K.L.M.', 'Lacsa', 'Latin American Wings', 'Oceanair Linhas Aereas', 'Plus Ultra Lineas Aereas', 'Qantas Airways', 'Sky Airline', 'United Airlines']         
+# SIGLAORI: Name city of origin.                                X 1           
+# SIGLADES: Destination city name.                              X 62
+
+2. Generate the following additional columns. Please export them to a CSV file named synthetic_features.csv:
+- high_season : 1 if Date-I is between Dec-15 and Mar-3, or Jul-15 and Jul-31, or Sep-11 and Sep-30, 0 otherwise.
+- min_diff : difference in minutes between Date-O and Date-I.
+- delay_15 : 1 if min_diff > 15, 0 if not.
+- period_day : morning (between 5:00 and 11:59), afternoon (between 12:00 and 18:59) and night (between 19:00 and 4:59), based onDate-I .
+
+3. 
+What is the behavior of the delay rate across 
+- destination       ['Des-I']
+- airline           ['Emp-I']
+- month of the year ['MES']
+- day of the week   ['DIANOM']
+- season            ['high_season']
+- type of flight    ['TIPOVUELO']
+
+What variables would you expect to have the most influence in predicting delays?

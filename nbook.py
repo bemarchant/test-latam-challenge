@@ -199,10 +199,10 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 
 param_grid = {
-    'n_estimators': [20],
-    'max_depth': [1],
-    'min_samples_split': [2],
-    'min_samples_leaf': [2],
+    'n_estimators': [20,30],
+    'max_depth': [2,10,20],
+    'min_samples_split': [2,4,8],
+    'min_samples_leaf': [2,4,8],
     'class_weight': ['balanced'],
 }
 
@@ -214,7 +214,6 @@ best_params = grid_search.best_params_
 best_model = grid_search.best_estimator_
 y_prob = best_model.predict_proba(X_test)
 y_pred = (y_prob[:,1] >= 0.50).astype(int)
-print(y_pred)
 accuracy = accuracy_score(y_test, y_pred)
 
 print(f"Accuracy: {accuracy}")
@@ -222,7 +221,8 @@ print("\nClassification Report:")
 print(classification_report(y_test, y_pred))
 print("\nConfusion Matrix:")
 print(confusion_matrix(y_test, y_pred))
-
+print("\n Best parameters")
+print(best_params)
 
 y_prob_train = best_model.predict_proba(X_train)
 y_prob_test = best_model.predict_proba(X_test)

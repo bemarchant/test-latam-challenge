@@ -71,7 +71,7 @@ def plot_roc_curve(y_probs_test, y_probs_train, y_test, y_train):
 
 def plot_feature_importances_top10(clf, feature_names):  
     plt.figure(figsize=(15, 5))  
-    top=10
+    top=20
     feature_importances_dict = {}
     for i, name in enumerate(clf.feature_importances_):
         feature_importances_dict[i] = name
